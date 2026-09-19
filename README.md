@@ -1,15 +1,18 @@
 # Grafana Living Visuals
 
-Two animated Grafana experiences: an anatomical heartbeat replay and an interactive data hall with 24 racks. The visuals run natively in the **HTML Graphics** panel and have editable HTML, CSS, and JavaScript sources.
+Five animated Grafana experiences: an anatomical heartbeat, a data hall, an AI server rack, a GPU cluster, and a server chassis. The visuals run natively in the **HTML Graphics** panel and have editable HTML, CSS, and JavaScript sources.
 
 **All bundled readings are fictional or simulated.** No real health data, production infrastructure, credentials, or running databases are included.
 
-## The two visuals
+## The visuals
 
 | Visual | What moves | What you can inspect |
 | --- | --- | --- |
 | Anatomical heartbeat | A two-part pulse follows the recorded BPM | Eight fictional workouts; play/pause, scrubber, replay speed, reduced motion, and a missing-signal demonstration |
 | Living Data Hall | Rack LEDs follow CPU activity; cooling paths move; cabinet colors reflect the selected metric | 24 racks in four rows; power, inlet/outlet temperature, CPU, memory, network, fans, inventory, hall meters, PUE, and freshness |
+| AI Server Rack | Accelerator lights, cabinet cooling fans, power and fabric activity | Eight selectable servers, 64 GPUs, HBM, utilization, temperatures, power, network, and a cooling fault in N03 |
+| GPU Cluster | Fabric traffic between two spines and four racks | 256 GPU cells, 32 servers, rack/node inspection, link utilization, training and inference workloads |
+| Server Chassis | PCIe, CPU fabric and BMC control paths; five rotating fans | Dual CPUs, eight GPUs, PCIe switches, fabric NICs, BMC, and six fan tachometers—F04 is failed at 0 RPM |
 
 ### Anatomical heartbeat
 
@@ -33,6 +36,8 @@ One simulated hall, **DH-01**, contains 24 racks arranged in rows A–D, with si
 These are screenshots of the running local Grafana dashboards, captured on September 19, 2026. The still images show a moment in time; the installed panels animate and their values change during playback or polling. Overview and detail captures were taken at different instants.
 
 ## Data sources and ingestion
+
+The three AI infrastructure views share an additional SQLite feed, described in [AI infrastructure telemetry](#ai-infrastructure-telemetry). The original heartbeat and data hall use the paths below.
 
 | | Heartbeat replay | Data hall operations |
 | --- | --- | --- |
@@ -95,6 +100,49 @@ Cabinet color encodes the selected metric. Activity-light timing follows CPU uti
 
 For real monitoring, replace the simulator with a collector or adapt queries from Prometheus, SNMP-derived metrics, a DCIM/BMS API, or a SQL telemetry store. Preserve rack IDs, units, measurement timestamps, null values, and independent hall meters. Those are future integration paths, not connections included here; see the [data-source exploration](docs/data-source-exploration.md) and [field contract](docs/architecture.md).
 
+## AI infrastructure visuals
+
+These three dashboards share one simulated inventory: **4 racks × 8 servers × 8 GPUs = 256 GPUs**. The rack view focuses on **AI-R01**; its server **AI-R01-N03** is the chassis shown in the cooling view. Use the navigation links inside each panel to move between them.
+
+### AI server rack
+
+![Simulated AI rack in Grafana with eight servers, N03 selected, and its eight GPU utilization and temperature tiles](docs/images/ai-rack-grafana.jpg)
+
+Select a server in the illustrated 42U cabinet, then a GPU in its accelerator tray. The inspector shows server power, mean GPU/CPU utilization, HBM use, network traffic, GPU temperature and power, and fan availability. N03 has **5 of 6 fans running**; the entire rack therefore has **47 of 48**. The fan symbol on each server represents its cooling group; individual fan states are shown in the chassis view.
+
+### GPU cluster
+
+![Simulated GPU cluster in Grafana with dual-spine traffic, four selectable racks and 256 GPU utilization cells](docs/images/gpu-cluster-grafana.jpg)
+
+Each small square represents one GPU. Rack selection reveals its eight servers; server selection shows HBM use, GPU hotspot temperature, workload and fan count. Animated uplinks connect each rack to two spines. Their tooltips show throughput, capacity and simulated latency. **Aurora training uses 192 GPUs** in racks 1–3; **Atlas inference uses 64 GPUs** in rack 4. Job token rates and training progress are illustrative generated values, not benchmarks.
+
+### Server chassis and stopped fan
+
+![Simulated server chassis in Grafana showing the BMC, two CPUs, PCIe switches, eight GPUs, fabric NICs and six fan modules with F04 stopped at zero RPM](docs/images/server-chassis-grafana.jpg)
+
+The logical board separates three connection types: **mint PCIe data paths**, **violet CPU/cluster fabric**, and **dotted amber BMC management and fan control**. Select any component or fan to inspect its readings. “Data plane” and “BMC plane” isolate the connection layers.
+
+Five fan rotors animate with speeds derived from their RPM values. **F04 reports 0 RPM, is marked FAILED, and has no rotation animation**, even though its BMC speed target remains nonzero. This represents an injected stall, not absent telemetry. The BMC remains online, and GPUs 5 and 6 receive an additional simulated thermal rise. Fan rotation is scaled down for visibility; a numeric 6,000 RPM reading is not rendered as 100 visible revolutions per second.
+
+The screenshots capture the running Grafana panels at different instants and scroll positions. All hardware readings and workloads are simulated. The board is an illustrative topology, not a vendor motherboard schematic or a lane-allocation specification.
+
+## AI infrastructure telemetry
+
+[`scripts/simulate_ai_infrastructure.py`](scripts/simulate_ai_infrastructure.py) generates a consistent snapshot every **2 seconds** and writes `runtime/ai-telemetry.sqlite` in a SQLite transaction. The **AI Infrastructure · SIMULATED LIVE** data source (UID `living-ai-infrastructure-sim`) uses the same `frser-sqlite-datasource` plugin in read-only mode. Each dashboard queries every **5 seconds**, and the shared HTML Graphics runtime updates the visual elements from those results.
+
+| SQLite table | Represents |
+| --- | --- |
+| `ai_meta`, `ai_racks`, `ai_nodes` | Cluster totals, four rack meters, and 32 server snapshots |
+| `ai_gpus` | 256 GPU utilization, temperature, power, HBM and local-fabric readings |
+| `ai_links` | Eight rack-to-spine links, including throughput, utilization, capacity and latency |
+| `ai_components`, `ai_fans` | N03's BMC, two CPUs, two PCIe switches, two NICs, and six fan tachometers/targets |
+| `ai_jobs` | GPU allocation, token rate and progress for the two fictional workloads |
+| `ai_history` | Up to 15 minutes of cluster, rack and chassis power/utilization/network samples |
+
+Power is W per GPU/component and kW per server/rack/cluster. Network rates are Gb/s, with cluster endpoint traffic displayed in Tb/s; each server's NIC pair is counted once. HBM values use decimal GB with **80 GB per GPU**, temperatures use °C, fan readings use RPM, and link latency uses microseconds. Each rack has a configured **80 kW** capacity. Rack IT power includes server totals plus **1.2 kW** of rack overhead; cluster IT power sums the four rack meters. Node power includes platform overhead beyond the individually illustrated components.
+
+The three new views retain the original freshness behavior: timestamped samples, a stale warning after 20 seconds, animation pause during a feed outage, and automatic recovery. Pause/resume controls change motion without stopping data polling. Samples are marked `synthetic=1`. There is no real BMC API, GPU exporter, scheduler or production network connected. See the [AI data contract and diagram notes](docs/ai-infrastructure.md).
+
 ## Run with an existing Grafana
 
 The checked-in exports were verified with Grafana **12.1.1**, HTML Graphics **2.2.3**, and the SQLite data source **4.0.6**. Python **3.10+** runs the simulator and build tools without additional packages. Node.js is only needed for JavaScript syntax checks.
@@ -131,12 +179,33 @@ For Docker or remote Grafana, `--db` must be the path **inside the Grafana serve
 
 The heartbeat can also be imported alone from `dashboards/living-atlas-heartbeat.json`; it needs HTML Graphics but no data source. For the data hall, use the installer or create the data source with UID `living-data-hall-sim`, then import `dashboards/living-data-hall.json`.
 
+### Add the AI rack, GPU cluster and chassis
+
+Start their shared simulator in its own terminal:
+
+```sh
+python3 scripts/simulate_ai_infrastructure.py
+```
+
+In another terminal, install the three dashboards and their separate read-only data source:
+
+```sh
+python3 scripts/install_dashboards.py \
+  --url http://127.0.0.1:3030 \
+  --user YOUR_GRAFANA_ADMIN \
+  --ai-db "$PWD/runtime/ai-telemetry.sqlite" \
+  --install-plugins
+```
+
+Pass both `--db` and `--ai-db` to install all five visuals together. `--db` alone retains the original heartbeat/data-hall installation. Use `--overwrite` only when intentionally updating existing dashboard UIDs. Both simulators are foreground processes; keep them running for fresh readings. Database paths must be visible inside the Grafana server, including when using Docker.
+
 ## Explore the implementation
 
 - [Data-source exploration and integration options](docs/data-source-exploration.md)
 - [Data contract, freshness, and animation design](docs/architecture.md)
 - [Validation and observed behavior](docs/validation.md)
 - [Asset provenance](docs/provenance.md)
+- [AI inventory, telemetry and chassis topology](docs/ai-infrastructure.md)
 
 ```text
 assets/                     Anatomical heart artwork
@@ -144,6 +213,10 @@ docs/images/                Screenshots captured from the running Grafana dashbo
 data/heartbeat-demo.json     Eight explicitly fictional recorded sessions
 panels/heartbeat/           Editable HTML, CSS, JS, and dashboard template
 panels/data-hall/           Editable rack map, rendering logic, and template
+panels/ai-rack/             AI cabinet and selected-server GPU tray
+panels/gpu-cluster/         Cluster fabric, GPU matrix and workload views
+panels/server-chassis/      BMC, CPU, PCIe, GPU and fan views
+panels/ai-shared/           Shared rendering lifecycle and visual styles
 dashboards/                Generated, directly importable Grafana JSON
 scripts/                   Portable builder, simulator, and API installer
 tests/                     Data, build, and packaging checks

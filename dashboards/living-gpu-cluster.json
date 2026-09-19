@@ -1,0 +1,162 @@
+{
+  "id": null,
+  "uid": "living-gpu-cluster",
+  "title": "Living GPU Cluster · Fabric & Workloads",
+  "description": "SIMULATED LIVE: A fabric of accelerators, from training jobs to individual nodes. Shared four-rack / 32-server / 256-GPU simulator. No real equipment connected.",
+  "tags": [
+    "ai-infrastructure",
+    "gpu-cluster",
+    "simulated-live"
+  ],
+  "timezone": "browser",
+  "schemaVersion": 41,
+  "version": 0,
+  "editable": true,
+  "graphTooltip": 0,
+  "refresh": "5s",
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "timepicker": {
+    "hidden": true,
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m"
+    ]
+  },
+  "templating": {
+    "list": []
+  },
+  "annotations": {
+    "list": []
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Living GPU Cluster · Fabric & Workloads · SIMULATED LIVE",
+      "type": "gapit-htmlgraphics-panel",
+      "pluginVersion": "2.2.3",
+      "transparent": true,
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 39
+      },
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "living-ai-infrastructure-sim"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "living-ai-infrastructure-sim"
+          },
+          "queryType": "table",
+          "rawQueryText": "SELECT * FROM ai_meta",
+          "queryText": "SELECT * FROM ai_meta",
+          "timeColumns": []
+        },
+        {
+          "refId": "B",
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "living-ai-infrastructure-sim"
+          },
+          "queryType": "table",
+          "rawQueryText": "SELECT * FROM ai_racks ORDER BY rack_id",
+          "queryText": "SELECT * FROM ai_racks ORDER BY rack_id",
+          "timeColumns": []
+        },
+        {
+          "refId": "C",
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "living-ai-infrastructure-sim"
+          },
+          "queryType": "table",
+          "rawQueryText": "SELECT * FROM ai_nodes ORDER BY node_id",
+          "queryText": "SELECT * FROM ai_nodes ORDER BY node_id",
+          "timeColumns": []
+        },
+        {
+          "refId": "D",
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "living-ai-infrastructure-sim"
+          },
+          "queryType": "table",
+          "rawQueryText": "SELECT * FROM ai_gpus ORDER BY gpu_id",
+          "queryText": "SELECT * FROM ai_gpus ORDER BY gpu_id",
+          "timeColumns": []
+        },
+        {
+          "refId": "E",
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "living-ai-infrastructure-sim"
+          },
+          "queryType": "table",
+          "rawQueryText": "SELECT * FROM ai_links ORDER BY link_id",
+          "queryText": "SELECT * FROM ai_links ORDER BY link_id",
+          "timeColumns": []
+        },
+        {
+          "refId": "F",
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "living-ai-infrastructure-sim"
+          },
+          "queryType": "table",
+          "rawQueryText": "SELECT * FROM ai_jobs ORDER BY job_id",
+          "queryText": "SELECT * FROM ai_jobs ORDER BY job_id",
+          "timeColumns": []
+        },
+        {
+          "refId": "H",
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "living-ai-infrastructure-sim"
+          },
+          "queryType": "table",
+          "rawQueryText": "SELECT * FROM ai_history WHERE scope='cluster' ORDER BY sampled_at_ms",
+          "queryText": "SELECT * FROM ai_history WHERE scope='cluster' ORDER BY sampled_at_ms",
+          "timeColumns": []
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {
+        "add100Percentage": true,
+        "centerAlignContent": false,
+        "overflow": "hidden",
+        "useGrafanaScrollbar": false,
+        "SVGBaseFix": false,
+        "rootCSS": "",
+        "onRender": "if (htmlNode.__aiUpdate) htmlNode.__aiUpdate(htmlGraphics.data);",
+        "renderOnMount": true,
+        "panelupdateOnMount": false,
+        "onInitOnResize": false,
+        "dynamicHtmlGraphics": false,
+        "dynamicData": false,
+        "dynamicProps": false,
+        "dynamicFieldDisplayValues": false,
+        "codeData": "{\"synthetic\": true, \"view\": \"gpu-cluster\", \"required\": [\"A\", \"B\", \"C\", \"D\", \"E\", \"F\", \"H\"]}",
+        "calcsMutation": "none",
+        "reduceOptions": {
+          "calcs": []
+        },
+        "html": "<div class=\"ai cluster waiting\"><header class=\"mast\"><div class=\"brand\"><b>g.</b><div><strong>LIVING GPU CLUSTER</strong><small>AURORA–01 / COMPUTE FABRIC</small></div></div><div class=\"source\"><span class=\"badge\">SIMULATED LIVE</span><span id=\"freshness\" class=\"freshness\">Waiting for telemetry</span></div></header><div class=\"hero\"><div><p class=\"eyebrow\">FOUR RACKS. ONE COLLECTIVE.</p><h1>256 GPUs. <em>One shared rhythm.</em></h1><p class=\"subtitle\">A fabric of accelerators, from training jobs to individual nodes.</p></div><button id=\"motion\" class=\"quiet\" aria-pressed=\"false\">Pause motion</button></div><div class=\"kpis\"><div class=\"kpi\"><span>ACCELERATORS</span><div><strong id=\"gpuCount\">—</strong><small></small></div><svg viewBox=\"0 0 200 28\" aria-hidden=\"true\"><path id=\"trend0\"></path></svg><p>32 servers · 4 racks</p></div><div class=\"kpi\"><span>GPU UTILIZATION</span><div><strong id=\"gpuUtil\">—</strong><small>%</small></div><svg viewBox=\"0 0 200 28\" aria-hidden=\"true\"><path id=\"trend1\"></path></svg><p>Mean across all accelerators</p></div><div class=\"kpi\"><span>CLUSTER IT POWER</span><div><strong id=\"clusterPower\">—</strong><small>kW</small></div><svg viewBox=\"0 0 200 28\" aria-hidden=\"true\"><path id=\"trend2\"></path></svg><p>Sum of four rack IT meters</p></div><div class=\"kpi\"><span>ENDPOINT TRAFFIC</span><div><strong id=\"traffic\">—</strong><small>Tb/s</small></div><svg viewBox=\"0 0 200 28\" aria-hidden=\"true\"><path id=\"trend3\"></path></svg><p>Counted once per server NIC pair</p></div></div><div class=\"empty\">Waiting for the Grafana SQLite telemetry feed…</div><div class=\"section-bar\"><div><h2>DUAL-SPINE FABRIC / SELECT A RACK</h2><p>Each square is one GPU · color intensity follows utilization</p></div><span class=\"pill\">256 / 256 GPUs available</span></div><section class=\"visual\" aria-label=\"GPU cluster fabric topology\"><svg id=\"clusterScene\" viewBox=\"0 0 1120 620\" role=\"group\" aria-label=\"Two spines connected to four GPU racks\"></svg></section><div class=\"legend\"><span><i class=\"violet\"></i>Animated fabric links</span><span><i></i>GPU utilization</span><span><i class=\"amber\"></i>N03 cooling fault</span></div><section class=\"detail\" aria-label=\"Selected cluster rack\"><div class=\"detail-head\"><h2 id=\"clusterRackName\">AI-R01</h2><span id=\"clusterRackStatus\" class=\"pill\">Waiting</span></div><p id=\"clusterRackSummary\">Select a rack above.</p><div id=\"clusterNodes\" class=\"node-grid\"></div><div id=\"clusterNodeDetail\" class=\"gpu-detail\"></div></section><div class=\"section-bar\"><div><h2>WORKLOADS IN FLIGHT</h2><p>Illustrative jobs on the same 256-GPU inventory</p></div></div><div id=\"jobs\" class=\"jobs\"></div><nav class=\"nav\" aria-label=\"Related infrastructure dashboards\"><a class=\"\" href=\"/d/living-ai-rack/living-ai-rack\">AI rack</a><a class=\"active\" href=\"/d/living-gpu-cluster/living-gpu-cluster\">GPU cluster</a><a class=\"\" href=\"/d/living-server-chassis/living-server-chassis\">Server chassis</a><a href=\"/d/living-data-hall/living-data-hall\">Data hall</a></nav><footer><span>SIMULATED READINGS · NO PHYSICAL HARDWARE CONNECTED</span><span>2s ingestion · 5s Grafana refresh · illustrative topology</span></footer></div>\n",
+        "css": ":host { color-scheme:dark; }\n* { box-sizing:border-box; }\n.ai { --accent:#84ddca; --violet:#b5a0ff; --amber:#ecc78d; --red:#f09584; --muted:#91a7b4; width:100%; height:100%; overflow:auto; container-type:inline-size; padding:0 26px 24px; background:radial-gradient(ellipse at 90% 0%,#192532 0,transparent 44%),#0e151d; color:#e8eeed; font:13px/1.5 Arial,Helvetica,sans-serif; }\n.ai.cluster { --accent:#b5a0ff; }.ai.chassis { --accent:#ecc78d; }\n.mast { min-height:72px; display:flex; align-items:center; justify-content:space-between; gap:14px; border-bottom:1px solid #2d3c47; }\n.brand { display:flex; gap:13px; align-items:center; }.brand b { font:44px Georgia,serif; color:var(--accent); letter-spacing:-5px; padding-right:5px; }.brand strong { display:block; font-size:12px; letter-spacing:.13em; }.brand small { font:9px monospace; letter-spacing:.1em; color:var(--muted); }\n.source { display:flex; align-items:flex-end; flex-direction:column; gap:5px; }.badge { border:1px solid #6a5b44; color:#ecc78d; padding:4px 8px; font:9px monospace; letter-spacing:.09em; white-space:nowrap; }.freshness { color:var(--muted); font:10px monospace; }.freshness::before { content:'●'; color:var(--accent); margin-right:5px; }\n.hero { display:flex; align-items:flex-end; justify-content:space-between; gap:18px; padding:25px 0 22px; }.eyebrow { color:var(--muted); font:10px/1.5 monospace; letter-spacing:.12em; margin:0 0 6px; }h1 { font:clamp(32px,4.2cqw,57px)/1.03 Georgia,serif; font-weight:400; letter-spacing:-.035em; margin:0; }h1 em { color:var(--accent); } .subtitle { font-size:12px; color:var(--muted); margin:10px 0 0; max-width:640px; }\nbutton,a { -webkit-tap-highlight-color:transparent; }button { cursor:pointer; font:inherit; }button:focus-visible,a:focus-visible,[role=button]:focus-visible { outline:2px solid #edf3d9; outline-offset:4px; }.quiet { background:transparent; color:#c1d2d8; border:1px solid #3f5562; padding:8px 11px; font-size:10px; white-space:nowrap; }.quiet:hover { border-color:var(--accent); }\n.kpis { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); border-block:1px solid #34444e; }.kpi { padding:16px 16px 15px; border-right:1px solid #2c3b44; min-width:0; }.kpi:first-child { padding-left:0; }.kpi:last-child { border-right:0; }.kpi>span { display:block; font:9px monospace; color:var(--muted); letter-spacing:.05em; }.kpi strong { font:38px/1.2 Georgia,serif; letter-spacing:-.045em; font-weight:400; }.kpi small { color:var(--muted); margin-left:6px; font-size:11px; }.kpi p { color:var(--muted); font-size:10px; margin:3px 0 0; }.kpi svg { width:100%; height:25px; display:block; margin-top:3px; }.kpi path { fill:none; stroke:var(--accent); stroke-width:1.6; vector-effect:non-scaling-stroke; opacity:.65; }\n.section-bar { display:flex; gap:12px; align-items:center; justify-content:space-between; padding:22px 0 12px; }.section-bar h2 { font:13px monospace; letter-spacing:.07em; margin:0; }.section-bar p { color:var(--muted); font-size:10px; margin:4px 0 0; }\n.visual { min-width:0; position:relative; border:1px solid #2a3a46; background:linear-gradient(140deg,#17233066,#0b121a99); border-radius:6px; overflow:hidden; }.visual>svg { display:block; width:100%; height:auto; }.scene { fill:none; }.svg-title { fill:#e0e9e8; font:22px monospace; letter-spacing:1px; }.svg-label { fill:#99afbb; font:16px monospace; }.svg-value { fill:#e5f1ec; font:32px Georgia,serif; }.svg-mini { fill:#8fa5b2; font:13px monospace; }.svg-accent { fill:var(--accent); }.hardware { fill:#15232f; stroke:#425967; stroke-width:1.5; }.hardware-top { fill:#213642; stroke:#526a75; stroke-width:1; }.board { fill:#101c25; stroke:#3d525e; stroke-width:2; }.selectable { cursor:pointer; outline:none; }.selectable .outline { stroke:#425969; stroke-width:1.5; }.selectable:hover .outline { stroke:var(--accent); }.selectable.selected .outline { stroke:#e7eacc; stroke-width:3; }.selectable.selected { filter:drop-shadow(0 0 8px #77d8c922); }.status-dot { fill:var(--accent); }.warning .status-dot,.degraded .status-dot { fill:var(--amber); }.failed .status-dot { fill:var(--red); }\n.flow { fill:none; stroke:#78cfc9; stroke-width:3; stroke-dasharray:8 14; animation:flow var(--flow-speed,2s) linear infinite; opacity:.8; }.flow.fabric { stroke:var(--violet); stroke-width:3.5; }.flow.management { stroke:var(--amber); stroke-width:2.5; stroke-dasharray:3 9; opacity:.7; }.flow.air { stroke:#70abbd; stroke-dasharray:12 24; opacity:.25; }.flow.power { stroke:var(--accent); opacity:.45; }.link-base { stroke:#293e4b; stroke-width:7; fill:none; }.signal { animation:signal var(--activity,1.4s) ease-in-out infinite; }.rotor { animation:rotate var(--spin,.8s) linear infinite; transform-box:fill-box; transform-origin:center; }.failed .rotor { animation:none!important; opacity:.4; }.failed .fan-housing { stroke:var(--red); }.pulse { animation:signal 2s ease-in-out infinite; }\n@keyframes flow { to { stroke-dashoffset:-44; } }@keyframes signal { 0%,100% { opacity:.35; }45% { opacity:1; }65% { opacity:.65; } }@keyframes rotate { to { transform:rotate(360deg); } }\n.legend { display:flex; flex-wrap:wrap; gap:15px; color:var(--muted); font:10px monospace; padding:12px 0; }.legend span { display:flex; align-items:center; gap:6px; }.legend i { display:inline-block; width:18px; height:2px; background:var(--accent); }.legend i.violet { background:var(--violet); }.legend i.amber { background:var(--amber); }.legend i.red { background:var(--red); }.legend .dotted { background:repeating-linear-gradient(90deg,var(--amber) 0 3px,transparent 3px 5px); }\n.detail { padding:18px; background:#14202a99; border:1px solid #334653; border-radius:6px; min-width:0; }.detail-head { display:flex; justify-content:space-between; align-items:center; gap:10px; }.detail-head h2 { font:30px Georgia,serif; margin:0; font-weight:400; letter-spacing:-.02em; }.pill { font:9px monospace; color:var(--accent); border:1px solid #45685f; border-radius:20px; padding:4px 8px; white-space:nowrap; }.pill.degraded,.pill.warm { color:var(--amber); border-color:#8b704e; }.pill.failed { color:var(--red); border-color:#a8685a; }.detail p { color:var(--muted); font-size:11px; margin:8px 0 12px; }.detail-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:13px; }.readout { border-bottom:1px solid #2b404c; padding-bottom:10px; }.readout span { display:block; font:9px monospace; color:var(--muted); }.readout strong { display:block; font:25px/1.4 Georgia,serif; font-weight:400; }.readout small { color:var(--muted); font-size:10px; }.bar { height:3px; background:#293e4b; margin-top:8px; }.bar i { display:block; height:100%; background:var(--accent); transition:width .5s; }\n.gpu-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:7px; }.gpu-tile { background:#192c37; border:1px solid #39545c; border-radius:4px; padding:10px 8px; color:#c8e8e0; text-align:left; min-width:0; position:relative; overflow:hidden; }.gpu-tile:before { content:''; position:absolute; width:3px; top:0; bottom:0; left:0; background:var(--gpu-color,#84ddca); }.gpu-tile span { display:block; font:10px monospace; color:#aec4cb; }.gpu-tile strong { display:block; font:24px Georgia,serif; margin:5px 0; }.gpu-tile small { font:10px monospace; color:var(--muted); }.gpu-tile.warm { border-color:#9a7256; --gpu-color:#edbf83; }.gpu-tile[aria-pressed=true] { outline:2px solid #e4e5cc; outline-offset:1px; }.gpu-detail { font:11px/1.7 monospace; color:#a2bbc3; margin-top:12px; min-height:40px; }\n.notice { padding:11px 13px; border-left:2px solid var(--amber); background:#75533117; color:#d1bfa1; font-size:11px; margin-top:15px; }.notice.failed { border-color:var(--red); background:#84432b17; color:#e9b6a9; }\n.switches { display:flex; flex-wrap:wrap; gap:5px; }.switches button { background:transparent; border:1px solid #3b4e5b; color:var(--muted); padding:6px 10px; font-size:10px; }.switches button[aria-pressed=true] { background:#2b3e4c; color:#e7efed; border-color:#758b91; }\n.nav { display:flex; flex-wrap:wrap; gap:8px; margin-top:18px; border-top:1px solid #2c3d47; padding-top:15px; }.nav a { color:var(--accent); border:1px solid #3b5260; text-decoration:none; font-size:11px; padding:7px 10px; }.nav a:hover { background:#293f4c; }.nav a.active { background:#233742; color:#eef0db; }\n.ai footer { display:flex; flex-wrap:wrap; justify-content:space-between; gap:8px; color:#819ba7; font:9px/1.6 monospace; border-top:1px solid #2c3d47; padding-top:13px; margin-top:17px; letter-spacing:.035em; }\n.ai.paused *,.ai.stale *,.ai.waiting * { animation-play-state:paused!important; }.ai.stale .freshness { color:var(--red); }.ai.stale .freshness:before { color:var(--red); }.ai.waiting .visual { opacity:.55; }.ai .empty { display:none; margin:14px 0; padding:12px; border:1px solid #625445; color:var(--amber); }.ai.waiting .empty { display:block; }\n@container (max-width:700px) { .hero { align-items:center; }h1 { font-size:34px; }.kpi { padding-inline:11px; }.kpi strong { font-size:29px; }.kpi>span { font-size:8px; }.source { gap:5px; }.section-bar { flex-wrap:wrap; }.detail-grid { gap:10px; } }\n@container (max-width:440px) { .mast { flex-wrap:wrap; padding-block:14px; }.brand strong { font-size:10px; }.source { flex-direction:row; align-items:center; }.hero { flex-wrap:wrap; }.kpis { grid-template-columns:repeat(2,minmax(0,1fr)); }.kpi:nth-child(2) { border-right:0; }.kpi:nth-child(3) { padding-left:0; }.kpi:nth-child(-n+2) { border-bottom:1px solid #2c3b44; }.gpu-grid { grid-template-columns:repeat(2,minmax(0,1fr)); } }\n@media (prefers-reduced-motion:reduce) { .ai * { animation-duration:0s!important; transition:none!important; } }\n\n/* Keep the hardware scene prominent at common desktop heights. */\n.mast { min-height:58px; }.hero { padding:17px 0; }h1 { font-size:clamp(30px,3.8cqw,47px); }.kpi { padding-block:12px; }.kpi strong { font-size:34px; }.kpi svg { height:19px; }.section-bar { padding-top:18px; }\n\n.node-grid { display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:8px; margin-top:15px; }.node-card { text-align:left; color:#dfdaf0; background:#1e2336; border:1px solid #41465c; padding:11px; border-radius:3px; }.node-card span { display:block; color:#a1a9be; font:10px monospace; }.node-card strong { display:block; font:26px Georgia,serif; margin:5px 0; }.node-card small { color:#a4a5b7; font:10px monospace; }.node-card.degraded { border-color:#ab805e; }.node-card[aria-pressed=true] { outline:2px solid #e5dfbd; }.jobs { display:grid; grid-template-columns:1fr 1fr; gap:14px; }.job { border:1px solid #3e415a; background:#211f333d; border-radius:5px; padding:18px; }.job h3 { margin:7px 0; font:21px Georgia,serif; font-weight:400; }.job p { font-size:11px; color:#a1aec1; }.job strong { font:26px Georgia,serif; font-weight:400; }.job .bar i { background:var(--violet); }@container (max-width:550px) { .node-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }.jobs { grid-template-columns:1fr; } }\n\n.cluster .visual>svg { max-height:500px; }\n",
+        "onInit": "// Shared HTML Graphics lifecycle; measurements are supplied only by Grafana queries.\nif (htmlNode.__aiCleanup) htmlNode.__aiCleanup();\nconst app = (() => {\n  const el=id=>htmlNode.getElementById(id), root=htmlNode.querySelector('.ai');\n  const media=window.matchMedia('(prefers-reduced-motion: reduce)');\n  const state={data:{},meta:null,paused:media.matches,error:false,disposed:false};\n  const listeners=[];\n  let renderer=()=>{};\n  const text=(id,value)=>{ if(el(id)) el(id).textContent=value; };\n  const num=(value,digits=1)=>Number.isFinite(value)?value.toFixed(digits):'—';\n  const clamp=(value,min=0,max=100)=>Math.max(min,Math.min(max,Number.isFinite(value)?value:min));\n  function listen(target,type,handler) { target.addEventListener(type,handler); listeners.push(()=>target.removeEventListener(type,handler)); }\n  function svg(tag,attrs={},parent) { const n=document.createElementNS('http://www.w3.org/2000/svg',tag); for(const [k,v] of Object.entries(attrs))n.setAttribute(k,String(v)); if(parent)parent.appendChild(n);return n; }\n  function label(parent,x,y,value,cls='svg-label',anchor='start') { const n=svg('text',{x,y,class:cls,'text-anchor':anchor},parent);n.textContent=value;return n; }\n  function rows(frame) { if(!frame?.fields?.length)return [];const out=[];for(let i=0;i<frame.fields[0].values.length;i++){const row={};for(const f of frame.fields)row[f.name]=typeof f.values.get==='function'?f.values.get(i):f.values[i];out.push(row);}return out; }\n  function bind(node,handler) { listen(node,'click',handler);listen(node,'keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();handler();}}); }\n  function spark(id,data,field) { const values=data.map(x=>x[field]).filter(Number.isFinite);if(!values.length)return;const low=Math.min(...values),span=Math.max(Math.max(...values)-low,.01);el(id).setAttribute('d',values.length===1?'M0 14H200':values.map((v,i)=>`${i?'L':'M'}${(i/(values.length-1)*200).toFixed(1)} ${(23-(v-low)/span*20).toFixed(1)}`).join(' ')); }\n  function freshness() { const age=state.meta?Math.max(0,Math.floor((Date.now()-state.meta.sampled_at_ms)/1000)):Infinity;const stale=state.error||age>20;root.classList.toggle('stale',stale);text('freshness',!state.meta?'Waiting for telemetry':state.error?'Query failed · values retained':stale?`Feed stale · ${age}s old`:`Updated ${age}s ago`); }\n  function update(panelData) {\n    if(state.disposed)return;\n    state.error=Boolean(panelData?.error||panelData?.errors?.length);\n    const data={};for(const frame of panelData?.series||[])data[frame.refId]=rows(frame);\n    const required=htmlGraphics.customProperties.required||['A'];\n    if(state.error||required.some(id=>!data[id]?.length)){state.error=state.error||Boolean(state.meta);freshness();return;}\n    state.data=data;state.meta=data.A[0];root.classList.remove('waiting');renderer(data);freshness();\n  }\n  function paused(value) { state.paused=value;root.classList.toggle('paused',value);text('motion',value?'Resume motion':'Pause motion');el('motion').setAttribute('aria-pressed',String(value)); }\n  listen(el('motion'),'click',()=>paused(!state.paused));listen(media,'change',event=>paused(event.matches));\n  const timer=setInterval(freshness,1000);\n  function cleanup(){if(state.disposed)return;state.disposed=true;clearInterval(timer);listeners.forEach(fn=>fn());htmlNode.removeEventListener('panelwillunmount',cleanup);if(htmlNode.__aiCleanup===cleanup)delete htmlNode.__aiCleanup;if(htmlNode.__aiUpdate===update)delete htmlNode.__aiUpdate;}\n  htmlNode.__aiCleanup=cleanup;htmlNode.__aiUpdate=update;htmlNode.addEventListener('panelwillunmount',cleanup);\n  function fan(parent,x,y,r=21){const group=svg('g',{transform:`translate(${x} ${y})`},parent);svg('circle',{r:r+5,fill:'#111c24',stroke:'#526a77','stroke-width':2,class:'fan-housing'},group);const rotor=svg('g',{class:'rotor'},group);for(let i=0;i<5;i++)svg('path',{d:`M2 -2C${r*.25} ${-r} ${r} ${-r} ${r} -2C${r*.7} 3 ${r*.25} 5 2 -2Z`,fill:'#8cb0b7',transform:`rotate(${i*72})`},rotor);svg('circle',{r:4,fill:'#d9e7df'},group);return group;}\n  return {el,root,state,text,num,clamp,listen,svg,label,bind,spark,fan,start(fn){renderer=fn;paused(state.paused);update(htmlGraphics.data);},repaint(){renderer(state.data);freshness();}};\n})();\n\nconst {el,svg,label,bind,text,num,clamp}=app;\nconst scene=el('clusterScene'),racks=new Map(),links=new Map(),nodeCards=[];\nlet selectedRack='AI-R01',selectedNode='AI-R01-N03';\nfor(const [name,x] of [['SPINE-A',205],['SPINE-B',665]]){\n svg('rect',{x,y:32,width:250,height:74,rx:7,fill:'#252638',stroke:'#75698e','stroke-width':2},scene);\n label(scene,x+125,64,name.replace('-',' '),'svg-title','middle');label(scene,x+125,89,'COLLECTIVE FABRIC','svg-mini','middle');\n for(let i=0;i<12;i++)svg('circle',{cx:x+27+i*18,cy:43,r:2,fill:'#b5a0ff',class:'signal',style:`animation-delay:-${i*.12}s`},scene);\n}\nfor(let r=0;r<4;r++){\n const id=`AI-R0${r+1}`,x=35+r*275,cx=x+112;\n for(let s=0;s<2;s++){\n  const from=s?790:330,level=133+s*30+r*6,end=cx+(s?25:-25),path=`M${from} 106V${level}Q${from} ${level+9} ${from+(end>from?12:-12)} ${level+9}H${end}V233`;\n  svg('path',{d:path,class:'link-base'},scene);const line=svg('path',{d:path,class:'flow fabric',style:`animation-delay:-${r*.3+s*.7}s`},scene);links.set(`${id}:SPINE-${s?'B':'A'}`,line);\n }\n const g=svg('g',{class:'selectable',role:'button',tabindex:0,'aria-label':`Rack ${id}`,'aria-pressed':String(id===selectedRack)},scene);\n svg('rect',{x,y:231,width:225,height:338,rx:8,fill:'#171e2c',class:'outline'},g);\n label(g,x+17,265,id,'svg-title');const dot=svg('circle',{cx:x+203,cy:258,r:5,class:'status-dot'},g);\n label(g,x+17,289,'8 NODES / 64 GPUs','svg-mini');\n const matrix=[];for(let n=0;n<8;n++)for(let k=0;k<8;k++)matrix.push(svg('rect',{x:x+18+k*24,y:307+n*22,width:17,height:15,rx:2,fill:'#b5a0ff'},g));\n const util=label(g,x+17,524,'—%','svg-value');label(g,x+99,521,'GPU UTIL','svg-mini');const power=label(g,x+17,550,'— kW','svg-label');\n bind(g,()=>{selectedRack=id;selectedNode=id+'-N03';app.repaint();});racks.set(id,{g,matrix,util,power,dot});\n}\nlabel(scene,560,603,'4 × 64 GPUs · TWO 1.6 Tb/s UPLINKS PER RACK','svg-label','middle');\nfor(let i=0;i<8;i++){\n const b=document.createElement('button');b.type='button';b.className='node-card';b.innerHTML='<span></span><strong>—</strong><small></small>';\n app.listen(b,'click',()=>{selectedNode=`${selectedRack}-N${String(i+1).padStart(2,'0')}`;app.repaint();});el('clusterNodes').appendChild(b);nodeCards.push(b);\n}\nfor(const id of ['aurora-train','atlas-serve']){const card=document.createElement('div');card.className='job';card.id='job-'+id;card.innerHTML='<span class=\"eyebrow\"></span><h3></h3><strong></strong><p></p><div class=\"bar\"><i></i></div>';el('jobs').appendChild(card);}\napp.start(data=>{\n if(!data.B?.length)return;\n const meta=data.A[0],history=data.H||[];\n text('gpuCount',meta.gpu_count);text('gpuUtil',num(meta.gpu_util_pct,0));text('clusterPower',num(meta.power_kw));text('traffic',num(meta.network_gbps/1000,2));\n el('trend0').setAttribute('d','M0 15H200');app.spark('trend1',history,'gpu_util_pct');app.spark('trend2',history,'power_kw');app.spark('trend3',history,'network_gbps');\n for(const rack of data.B){const g=racks.get(rack.rack_id);g.g.classList.toggle('selected',rack.rack_id===selectedRack);g.g.classList.toggle('degraded',rack.status==='degraded');g.g.setAttribute('aria-pressed',String(rack.rack_id===selectedRack));g.g.setAttribute('aria-label',`${rack.rack_id}, 64 GPUs, ${num(rack.gpu_util_pct,0)} percent utilization, ${num(rack.power_kw)} kilowatts`);g.util.textContent=num(rack.gpu_util_pct,0)+'%';g.power.textContent=num(rack.power_kw)+' kW';data.D.filter(gpu=>gpu.rack_id===rack.rack_id).forEach((gpu,i)=>{g.matrix[i].setAttribute('fill',gpu.status==='warm'?'#ecc78d':'#b5a0ff');g.matrix[i].setAttribute('opacity',String(.16+gpu.util_pct/120));});}\n for(const l of data.E){const path=links.get(l.link_id);path.style.setProperty('--flow-speed',`${3.5-clamp(l.util_pct)/40}s`);path.style.opacity=l.rack_id===selectedRack?'.95':'.4';let title=path.querySelector('title');if(!title)title=svg('title',{},path);title.textContent=`${l.link_id}: ${num(l.throughput_gbps,0)} / 1600 Gb/s · ${num(l.latency_us,2)} μs`;}\n const rack=data.B.find(r=>r.rack_id===selectedRack),nodes=data.C.filter(n=>n.rack_id===selectedRack),uplinks=data.E.filter(l=>l.rack_id===selectedRack);\n text('clusterRackName',selectedRack);text('clusterRackStatus',rack.status==='degraded'?'COOLING FAULT / N03':'HEALTHY');el('clusterRackStatus').className='pill '+rack.status;\n text('clusterRackSummary',`64 GPUs · ${num(rack.power_kw)} kW · ${num(rack.network_gbps/1000,2)} Tb/s endpoint traffic · spine A/B ${uplinks.map(l=>num(l.util_pct,0)+'%').join(' / ')} utilization`);\n nodes.forEach((n,i)=>{const b=nodeCards[i];b.querySelector('span').textContent=n.node_id.split('-').at(-1)+(n.status==='degraded'?' · FAN FAULT':'');b.querySelector('strong').textContent=num(n.gpu_util_pct,0)+'%';b.querySelector('small').textContent=`${num(n.power_kw)} kW · 8 GPUs`;b.classList.toggle('degraded',n.status==='degraded');b.setAttribute('aria-pressed',String(n.node_id===selectedNode));b.setAttribute('aria-label',`${n.node_id}, ${num(n.gpu_util_pct,0)} percent GPU utilization${n.status==='degraded'?', cooling fault':''}`);});\n const node=nodes.find(n=>n.node_id===selectedNode)||nodes[0];text('clusterNodeDetail',`${node.node_id} · HBM ${num(node.hbm_used_gb,0)} / 640 GB · max GPU ${num(node.gpu_temp_c)}°C · ${node.fan_ok}/6 fans · ${node.job_id==='aurora-train'?'Aurora training':'Atlas inference'}`);\n for(const job of data.F){const card=el('job-'+job.job_id);card.querySelector('.eyebrow').textContent=`${job.allocated_gpus} GPUs · ${job.status.toUpperCase()}`;card.querySelector('h3').textContent=job.label;card.querySelector('strong').textContent=num(job.tokens_per_s/1000,1)+'k tokens/s';card.querySelector('p').textContent=job.kind==='training'?`${num(job.progress_pct)}% through the simulated training cycle`:'Continuous simulated inference traffic';card.querySelector('.bar i').style.width=(job.kind==='training'?job.progress_pct:100)+'%';}\n});\n"
+      }
+    }
+  ]
+}

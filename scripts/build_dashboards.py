@@ -5,7 +5,9 @@ import json
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-OUTPUTS = {'heartbeat': 'living-atlas-heartbeat.json', 'data-hall': 'living-data-hall.json'}
+OUTPUTS = {'heartbeat': 'living-atlas-heartbeat.json', 'data-hall': 'living-data-hall.json',
+           'ai-rack': 'living-ai-rack.json', 'gpu-cluster': 'living-gpu-cluster.json',
+           'server-chassis': 'living-server-chassis.json'}
 
 
 def build(name):
@@ -15,6 +17,10 @@ def build(name):
     options['html'] = (source / 'panel.html').read_text()
     options['css'] = (source / 'panel.css').read_text()
     options['onInit'] = (source / 'on-init.js').read_text()
+    if name in {'ai-rack', 'gpu-cluster', 'server-chassis'}:
+        common = ROOT / 'panels/ai-shared'
+        options['css'] = (common / 'panel.css').read_text() + '\n' + options['css']
+        options['onInit'] = (common / 'runtime.js').read_text() + '\n' + options['onInit']
     if name == 'heartbeat':
         fixture = json.loads((ROOT / 'data/heartbeat-demo.json').read_text())
         if fixture.get('synthetic') is not True:

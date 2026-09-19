@@ -1,0 +1,148 @@
+{
+  "id": null,
+  "uid": "living-server-chassis",
+  "title": "Living Server Chassis · BMC & Cooling",
+  "description": "SIMULATED LIVE: Two CPUs, eight GPUs, six fans—and a BMC watching over them. Shared four-rack / 32-server / 256-GPU simulator. No real equipment connected.",
+  "tags": [
+    "ai-infrastructure",
+    "server-chassis",
+    "simulated-live"
+  ],
+  "timezone": "browser",
+  "schemaVersion": 41,
+  "version": 0,
+  "editable": true,
+  "graphTooltip": 0,
+  "refresh": "5s",
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "timepicker": {
+    "hidden": true,
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m"
+    ]
+  },
+  "templating": {
+    "list": []
+  },
+  "annotations": {
+    "list": []
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Living Server Chassis · BMC & Cooling · SIMULATED LIVE",
+      "type": "gapit-htmlgraphics-panel",
+      "pluginVersion": "2.2.3",
+      "transparent": true,
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 39
+      },
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "living-ai-infrastructure-sim"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "living-ai-infrastructure-sim"
+          },
+          "queryType": "table",
+          "rawQueryText": "SELECT * FROM ai_meta",
+          "queryText": "SELECT * FROM ai_meta",
+          "timeColumns": []
+        },
+        {
+          "refId": "B",
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "living-ai-infrastructure-sim"
+          },
+          "queryType": "table",
+          "rawQueryText": "SELECT * FROM ai_components WHERE node_id='AI-R01-N03' ORDER BY component_id",
+          "queryText": "SELECT * FROM ai_components WHERE node_id='AI-R01-N03' ORDER BY component_id",
+          "timeColumns": []
+        },
+        {
+          "refId": "C",
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "living-ai-infrastructure-sim"
+          },
+          "queryType": "table",
+          "rawQueryText": "SELECT * FROM ai_gpus WHERE node_id='AI-R01-N03' ORDER BY gpu_index",
+          "queryText": "SELECT * FROM ai_gpus WHERE node_id='AI-R01-N03' ORDER BY gpu_index",
+          "timeColumns": []
+        },
+        {
+          "refId": "D",
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "living-ai-infrastructure-sim"
+          },
+          "queryType": "table",
+          "rawQueryText": "SELECT * FROM ai_fans WHERE node_id='AI-R01-N03' ORDER BY fan_id",
+          "queryText": "SELECT * FROM ai_fans WHERE node_id='AI-R01-N03' ORDER BY fan_id",
+          "timeColumns": []
+        },
+        {
+          "refId": "E",
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "living-ai-infrastructure-sim"
+          },
+          "queryType": "table",
+          "rawQueryText": "SELECT * FROM ai_nodes WHERE node_id='AI-R01-N03'",
+          "queryText": "SELECT * FROM ai_nodes WHERE node_id='AI-R01-N03'",
+          "timeColumns": []
+        },
+        {
+          "refId": "H",
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "living-ai-infrastructure-sim"
+          },
+          "queryType": "table",
+          "rawQueryText": "SELECT * FROM ai_history WHERE scope='chassis' ORDER BY sampled_at_ms",
+          "queryText": "SELECT * FROM ai_history WHERE scope='chassis' ORDER BY sampled_at_ms",
+          "timeColumns": []
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {
+        "add100Percentage": true,
+        "centerAlignContent": false,
+        "overflow": "hidden",
+        "useGrafanaScrollbar": false,
+        "SVGBaseFix": false,
+        "rootCSS": "",
+        "onRender": "if (htmlNode.__aiUpdate) htmlNode.__aiUpdate(htmlGraphics.data);",
+        "renderOnMount": true,
+        "panelupdateOnMount": false,
+        "onInitOnResize": false,
+        "dynamicHtmlGraphics": false,
+        "dynamicData": false,
+        "dynamicProps": false,
+        "dynamicFieldDisplayValues": false,
+        "codeData": "{\"synthetic\": true, \"view\": \"server-chassis\", \"required\": [\"A\", \"B\", \"C\", \"D\", \"E\", \"H\"]}",
+        "calcsMutation": "none",
+        "reduceOptions": {
+          "calcs": []
+        }
+      }
+    }
+  ]
+}

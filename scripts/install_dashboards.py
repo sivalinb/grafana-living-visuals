@@ -21,20 +21,35 @@ class NoRedirect(urllib.request.HTTPRedirectHandler):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--url', default=os.environ.get('GRAFANA_URL', 'http://127.0.0.1:3000'))
-    parser.add_argument('--db', required=True, help='Absolute database path as seen by the Grafana server')
+    parser.add_argument('--db', help='Absolute data-hall database path; installs heartbeat and data hall')
+    parser.add_argument('--ai-db', help='Absolute AI telemetry database path; installs AI rack, GPU cluster, and chassis')
     parser.add_argument('--user', default=os.environ.get('GRAFANA_USER'))
     parser.add_argument('--install-plugins', action='store_true', help='Install missing plugins; requires a Grafana server admin')
     parser.add_argument('--overwrite', action='store_true', help='Update dashboards with matching UIDs; never changes a conflicting data source')
     parser.add_argument('--dry-run', action='store_true', help='Print the plan without authentication or API calls')
     args = parser.parse_args()
-    if not Path(args.db).is_absolute():
-        parser.error('--db must be an absolute path visible to the Grafana server')
-    dashboards = [json.loads(p.read_text()) for p in sorted((ROOT / 'dashboards').glob('*.json'))]
-    if len(dashboards) != 2:
-        raise SystemExit('Build the two dashboards before installing.')
+    if not args.db and not args.ai_db:
+        parser.error('provide --db for the original visuals, --ai-db for AI infrastructure, or both')
+    for value in (args.db, args.ai_db):
+        if value and not Path(value).is_absolute():
+            parser.error('database paths must be absolute paths visible to the Grafana server')
+    selected = []
+    sources = []
+    if args.db:
+        selected += ['living-atlas-heartbeat', 'living-data-hall']
+        sources.append(('living-data-hall-sim', 'Data Hall · SIMULATED LIVE', args.db))
+    if args.ai_db:
+        selected += ['living-ai-rack', 'living-gpu-cluster', 'living-server-chassis']
+        sources.append(('living-ai-infrastructure-sim', 'AI Infrastructure · SIMULATED LIVE', args.ai_db))
+    dashboards = []
+    for uid in selected:
+        path = ROOT / 'dashboards' / (uid + '.json')
+        if not path.exists():
+            raise SystemExit('Build the dashboards before installing: python3 scripts/build_dashboards.py')
+        dashboards.append(json.loads(path.read_text()))
     if args.dry_run:
-        print(json.dumps({'grafana': args.url, 'sqlite_path': args.db,
-                          'data_source': 'living-data-hall-sim', 'dashboards': [d['uid'] for d in dashboards]}, indent=2))
+        print(json.dumps({'grafana': args.url, 'data_sources': [{'uid': uid, 'path': path} for uid, _, path in sources],
+                          'dashboards': [d['uid'] for d in dashboards]}, indent=2))
         return
     token = os.environ.get('GRAFANA_TOKEN')
     if token:
@@ -66,23 +81,27 @@ def main():
                 raise SystemExit(f'Missing {plugin}. Install it in Grafana or pass --install-plugins with server-admin credentials.')
             api(f'/api/plugins/{plugin}/install', {'version': version})
             print(f'Installed {plugin} {version}')
-    uid = 'living-data-hall-sim'
-    existing = api('/api/datasources/uid/' + uid, missing_ok=True)
-    if existing:
-        if existing['type'] != 'frser-sqlite-datasource' or existing.get('jsonData', {}).get('path') != args.db:
-            raise SystemExit('Existing data source UID points elsewhere. No data-source configuration was changed.')
-    else:
-        api('/api/datasources', {'uid': uid, 'name': 'Data Hall · SIMULATED LIVE',
-                               'type': 'frser-sqlite-datasource', 'access': 'proxy', 'isDefault': False,
-                               'jsonData': {'path': args.db, 'pathOptions': 'mode=ro', 'attachLimit': 0}})
-    data_hall = next(d for d in dashboards if d['uid'] == 'living-data-hall')
+    for uid, name, path in sources:
+        existing = api('/api/datasources/uid/' + uid, missing_ok=True)
+        if existing:
+            if existing['type'] != 'frser-sqlite-datasource' or existing.get('jsonData', {}).get('path') != path:
+                raise SystemExit(f'Existing data source {uid} points elsewhere. No conflicting data-source configuration was changed.')
+        else:
+            api('/api/datasources', {'uid': uid, 'name': name,
+                                   'type': 'frser-sqlite-datasource', 'access': 'proxy', 'isDefault': False,
+                                   'jsonData': {'path': path, 'pathOptions': 'mode=ro', 'attachLimit': 0}})
     now = int(time.time() * 1000)
-    result = api('/api/ds/query', {'from': str(now - 900000), 'to': str(now),
-                                 'queries': [dict(q, intervalMs=5000, maxDataPoints=1000) for q in data_hall['panels'][0]['targets']]})
-    for ref in ['A', 'B', 'C']:
-        entry = result.get('results', {}).get(ref, {})
-        if entry.get('error') or not entry.get('frames'):
-            raise SystemExit(f'Telemetry query {ref} failed. Check the database path and run the simulator first.')
+    for dashboard in dashboards:
+        targets = dashboard['panels'][0]['targets']
+        if not targets:
+            continue
+        result = api('/api/ds/query', {'from': str(now - 900000), 'to': str(now),
+                                     'queries': [dict(q, intervalMs=5000, maxDataPoints=1000) for q in targets]})
+        for target in targets:
+            ref = target['refId']
+            entry = result.get('results', {}).get(ref, {})
+            if entry.get('error') or not entry.get('frames'):
+                raise SystemExit(f'{dashboard["uid"]} query {ref} failed. Check the database path and run its simulator first.')
     folder = next((f for f in api('/api/folders') if f['title'] == 'Living Visuals'), None)
     folder = folder or api('/api/folders', {'title': 'Living Visuals'})
     for dashboard in dashboards:
