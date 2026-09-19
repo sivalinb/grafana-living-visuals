@@ -1,0 +1,115 @@
+{
+  "id": null,
+  "uid": "living-data-hall",
+  "title": "Living Data Hall · Rack Operations",
+  "description": "SIMULATED LIVE: animated data hall with 24 interactive racks. A local simulator writes fresh readings every 2 seconds; Grafana queries every 5 seconds. No production telemetry is connected.",
+  "tags": [
+    "data-center",
+    "rack-operations",
+    "simulated-live"
+  ],
+  "timezone": "browser",
+  "schemaVersion": 41,
+  "version": 0,
+  "editable": true,
+  "graphTooltip": 0,
+  "refresh": "5s",
+  "time": {
+    "from": "now-15m",
+    "to": "now"
+  },
+  "timepicker": {
+    "hidden": true,
+    "refresh_intervals": [
+      "5s",
+      "10s",
+      "30s",
+      "1m"
+    ]
+  },
+  "templating": {
+    "list": []
+  },
+  "annotations": {
+    "list": []
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Data Hall 01 · Simulated live operations",
+      "type": "gapit-htmlgraphics-panel",
+      "pluginVersion": "2.2.3",
+      "transparent": true,
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 28
+      },
+      "datasource": {
+        "type": "frser-sqlite-datasource",
+        "uid": "living-data-hall-sim"
+      },
+      "targets": [
+        {
+          "refId": "A",
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "living-data-hall-sim"
+          },
+          "queryType": "table",
+          "rawQueryText": "SELECT * FROM racks ORDER BY row_id, position",
+          "queryText": "SELECT * FROM racks ORDER BY row_id, position",
+          "timeColumns": []
+        },
+        {
+          "refId": "B",
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "living-data-hall-sim"
+          },
+          "queryType": "table",
+          "rawQueryText": "SELECT * FROM hall WHERE hall_id='DH-01'",
+          "queryText": "SELECT * FROM hall WHERE hall_id='DH-01'",
+          "timeColumns": []
+        },
+        {
+          "refId": "C",
+          "datasource": {
+            "type": "frser-sqlite-datasource",
+            "uid": "living-data-hall-sim"
+          },
+          "queryType": "table",
+          "rawQueryText": "SELECT sampled_at_ms, it_power_kw, avg_inlet_c, pue, network_gbps FROM hall_history ORDER BY sampled_at_ms",
+          "queryText": "SELECT sampled_at_ms, it_power_kw, avg_inlet_c, pue, network_gbps FROM hall_history ORDER BY sampled_at_ms",
+          "timeColumns": []
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "options": {
+        "add100Percentage": true,
+        "centerAlignContent": false,
+        "overflow": "hidden",
+        "useGrafanaScrollbar": false,
+        "SVGBaseFix": false,
+        "rootCSS": "",
+        "onRender": "if (htmlNode.__dcUpdate) htmlNode.__dcUpdate(htmlGraphics.data);",
+        "renderOnMount": true,
+        "panelupdateOnMount": false,
+        "onInitOnResize": false,
+        "dynamicHtmlGraphics": false,
+        "dynamicData": false,
+        "dynamicProps": false,
+        "dynamicFieldDisplayValues": false,
+        "codeData": "{\"synthetic\": true, \"hall\": \"DH-01\", \"staleAfterSeconds\": 20}",
+        "calcsMutation": "none",
+        "reduceOptions": {
+          "calcs": []
+        }
+      }
+    }
+  ]
+}

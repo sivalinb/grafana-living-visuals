@@ -1,0 +1,15 @@
+runtime/
+__pycache__/
+*.py[cod]
+*.sqlite
+*.sqlite-*
+*.db
+*.db-*
+*.log
+*.pid
+.env
+.env.*
+!.env.example
+.DS_Store
+.venv/
+node_modules/

@@ -1,0 +1,44 @@
+<div class="dc waiting">
+  <header class="masthead">
+    <div class="identity"><span class="mark">d.</span><div><strong>LIVING DATA HALL</strong><span>DH–01 / INFRASTRUCTURE OBSERVATORY</span></div></div>
+    <div class="source"><span class="sim-badge">SIMULATED LIVE</span><span id="freshness"><i></i>Waiting for telemetry</span></div>
+  </header>
+  <div class="intro"><div><p class="eyebrow">ONE HALL. EVERY RACK. IN MOTION.</p><h1>Feel the <em>flow of compute.</em></h1></div><button id="motion" class="quiet" aria-pressed="false">Pause motion</button></div>
+  <div class="metrics">
+    <div class="metric"><span>IT POWER / HALL METER</span><div><strong id="itPower">—</strong><small>kW</small></div><svg viewBox="0 0 220 28" aria-hidden="true"><path id="powerTrend"></path></svg><p id="facility">Facility power — kW</p></div>
+    <div class="metric"><span>AVERAGE INLET</span><div><strong id="inlet">—</strong><small>°C</small></div><svg viewBox="0 0 220 28" aria-hidden="true"><path id="inletTrend"></path></svg><p id="hotspot">Hottest rack — °C</p></div>
+    <div class="metric"><span>PUE / SIMULATED METERS</span><div><strong id="pue">—</strong><small>ratio</small></div><svg viewBox="0 0 220 28" aria-hidden="true"><path id="pueTrend"></path></svg><p>Facility power ÷ IT power</p></div>
+    <div class="metric"><span>NETWORK / REPORTING RACKS</span><div><strong id="network">—</strong><small>Gb/s</small></div><svg viewBox="0 0 220 28" aria-hidden="true"><path id="networkTrend"></path></svg><p id="reporting">— / 24 racks reporting</p></div>
+  </div>
+  <div class="visual-grid">
+    <section class="hall" aria-label="Interactive data hall map">
+      <div class="map-toolbar"><div><span class="eyebrow">DATA HALL 01</span><span class="map-caption">4 rows · 24 racks · select a cabinet</span></div><div class="view-switch" role="group" aria-label="Rack color metric"><button data-mode="temperature" aria-pressed="true">Temperature</button><button data-mode="power" aria-pressed="false">Power</button><button data-mode="cpu" aria-pressed="false">CPU</button></div></div>
+      <div class="map-frame">
+        <svg id="hallMap" viewBox="0 0 1120 620" role="group" aria-label="Data hall racks A01 through D06">
+          <defs>
+            <linearGradient id="floorFill" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#1b2730"/><stop offset="1" stop-color="#13191f"/></linearGradient>
+            <linearGradient id="rackFill" x1="0" x2="1"><stop stop-color="#1c2932"/><stop offset="1" stop-color="#111b23"/></linearGradient>
+            <linearGradient id="rackTop" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#344854"/><stop offset="1" stop-color="#1a2c37"/></linearGradient>
+          </defs>
+          <path d="M190 24H1090L939 590H39Z" fill="url(#floorFill)" stroke="#36505a" stroke-width="1.5"/>
+          <g id="floorLines" stroke="#26383f" stroke-width="1" opacity=".65"></g>
+          <g id="coolingLanes"></g>
+          <g id="racks"></g>
+          <text x="50" y="609" class="floor-label">COOL AIR SUPPLY</text><text x="1067" y="609" text-anchor="end" class="floor-label">DH–01 · 240 kW INSTALLED RACK CAPACITY</text>
+        </svg>
+        <div id="noData" class="no-data">Waiting for Grafana telemetry…</div>
+      </div>
+      <div class="map-bottom"><div class="legend"><span><i class="healthy"></i>Normal</span><span><i class="warning"></i>Warning</span><span><i class="critical"></i>Critical</span><span><i class="offline"></i>No signal</span></div><span id="scaleLabel">Inlet: cool → warm</span></div>
+      <div class="hall-strip"><span id="cpuHall">CPU —%</span><span id="humidity">Humidity —%</span><span id="cooling">Cooling — kW</span></div>
+    </section>
+    <aside class="inspector" aria-label="Selected rack details">
+      <div class="inspector-top"><span class="eyebrow">SELECTED RACK</span><span id="rackStatus" class="status-pill">Waiting</span></div>
+      <h2 id="rackName">B04</h2><p id="rackLocation">Row B · Data Hall 01</p>
+      <div class="rack-metrics"><div><span>POWER</span><strong id="rackPower">—</strong><small id="rackCapacity">of 10.0 kW capacity</small><div class="bar"><i id="powerBar"></i></div></div><div><span>INLET / OUTLET</span><strong id="rackThermal">—</strong><small>Air temperature · °C</small></div><div><span>CPU / MEMORY</span><strong id="rackCompute">—</strong><small>Utilization · %</small><div class="bar"><i id="cpuBar"></i></div></div><div><span>NETWORK</span><strong id="rackNetwork">—</strong><small>Aggregate throughput · Gb/s</small></div></div>
+      <div class="rack-inventory"><span id="servers">— servers</span><span id="occupied">— / 42U occupied</span><span id="fans">Fans — RPM</span></div>
+      <div id="rackMessage" class="rack-message">Select a rack to inspect its readings.</div><p id="rackAge" class="rack-age">Waiting for a sample</p>
+    </aside>
+  </div>
+  <div class="attention"><span class="eyebrow">NEEDS ATTENTION</span><div id="alerts"><span>Waiting for telemetry</span></div></div>
+  <footer><span>SIMULATED READINGS · NO PRODUCTION SYSTEM CONNECTED</span><span>Animated activity follows utilization · refreshed every 5s</span></footer>
+</div>

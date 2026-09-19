@@ -1,0 +1,33 @@
+<div class="atlas">
+  <header>
+    <div class="brand"><span>a.</span> LIVING ATLAS <small>THE RHYTHM OF EFFORT</small></div>
+    <span class="badge">FICTIONAL DATA</span>
+  </header>
+  <div class="workspace">
+    <section class="stage" aria-label="Animated anatomical heart">
+      <div class="stage-top"><span>01 / CARDIAC REPLAY</span><span>RECORDED RATE</span></div>
+      <div class="halo"></div><div class="orbit"></div><div class="orbit orbit-two"></div>
+      <img id="heart" src="__HEART_IMAGE__" alt="Anatomical heart illustration pulsing at the selected recorded BPM">
+      <div class="annotation"><span class="micro">OBSERVATION</span><strong id="signal">Signal available</strong><span id="age">0s since sample</span></div>
+      <div class="reading"><span id="bpm">—</span><span class="unit">BPM</span><small>RECORDED HEART RATE</small></div>
+      <p class="footnote">An illustration of rate. Not an ECG or a live heartbeat.</p>
+    </section>
+    <aside>
+      <p class="eyebrow">THE RHYTHM OF EFFORT</p>
+      <h1>Feel the<br><em>recorded rhythm.</em></h1>
+      <p class="intro">Move through a workout. The heart follows the recorded rate; a missing signal stays missing.</p>
+      <label for="workout">Choose a fictional recorded session</label>
+      <select id="workout" aria-label="Recorded session"></select>
+      <div class="facts"><div><span>RECORDED DISTANCE</span><strong id="distance">—</strong></div><div><span>ELAPSED TIME</span><strong id="duration">—</strong></div></div>
+      <div class="explanation"><span class="micro">WHAT YOU ARE SEEING</span><p>The same two-part pulse, following the selected BPM. Replay speed moves through samples faster; the heartbeat stays at the displayed rate.</p></div>
+      <div class="toggles"><button id="motion" aria-pressed="false">Reduce motion</button><label class="gap-label"><input id="gap" type="checkbox"> Demonstrate a signal gap</label></div>
+    </aside>
+  </div>
+  <div class="transport" role="group" aria-label="Replay controls">
+    <button id="play" class="play" aria-label="Pause replay">Ⅱ</button>
+    <div class="clock"><strong id="clock">00:00</strong><span id="total">/ 44:00</span></div>
+    <div class="scrubber"><label for="seek">WORKOUT PLAYHEAD</label><input id="seek" type="range" min="0" max="2640" value="0" step="1" aria-label="Workout time"><div><span>START</span><span>FINISH</span></div></div>
+    <label class="speed-label" for="speed">REPLAY SPEED<select id="speed"><option value="1">1×</option><option value="10">10×</option><option value="30" selected>30×</option><option value="60">60×</option></select></label>
+  </div>
+  <footer><span>FICTIONAL WORKOUT · REPLAY LOOPS AT THE END</span><span>Illustrative motion, driven by recorded samples</span></footer>
+</div>

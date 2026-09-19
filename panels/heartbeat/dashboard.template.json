@@ -1,0 +1,70 @@
+{
+  "id": null,
+  "uid": "living-atlas-heartbeat",
+  "title": "Living Atlas · Animated Heartbeat",
+  "description": "Anatomical heart animation using the original Living Atlas artwork and two-part pulse. Self-contained fictional workout replay; no live health measurements.",
+  "tags": [
+    "living-atlas",
+    "heartbeat",
+    "fictional-demo"
+  ],
+  "timezone": "browser",
+  "schemaVersion": 41,
+  "version": 0,
+  "editable": true,
+  "graphTooltip": 0,
+  "refresh": "",
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "timepicker": {
+    "hidden": true
+  },
+  "templating": {
+    "list": []
+  },
+  "annotations": {
+    "list": []
+  },
+  "panels": [
+    {
+      "id": 1,
+      "title": "Recorded rhythm",
+      "type": "gapit-htmlgraphics-panel",
+      "pluginVersion": "2.2.3",
+      "transparent": true,
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 19
+      },
+      "fieldConfig": {
+        "defaults": {},
+        "overrides": []
+      },
+      "targets": [],
+      "options": {
+        "add100Percentage": true,
+        "centerAlignContent": false,
+        "overflow": "hidden",
+        "useGrafanaScrollbar": false,
+        "SVGBaseFix": false,
+        "rootCSS": "",
+        "onRender": "",
+        "renderOnMount": false,
+        "panelupdateOnMount": false,
+        "onInitOnResize": false,
+        "dynamicHtmlGraphics": false,
+        "dynamicData": false,
+        "dynamicProps": false,
+        "dynamicFieldDisplayValues": false,
+        "calcsMutation": "none",
+        "reduceOptions": {
+          "calcs": []
+        }
+      }
+    }
+  ]
+}
